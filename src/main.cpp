@@ -1,3 +1,53 @@
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Motor1               motor         1               
+// Motor2               motor         2               
+// Controller1          controller                    
+// Motor3               motor         3               
+// Motor4               motor         4               
+// Motor20              motor         20              
+// Motor11              motor         11              
+// Motor7               motor         7               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Motor1               motor         1               
+// Motor2               motor         2               
+// Controller1          controller                    
+// Motor3               motor         3               
+// Motor4               motor         4               
+// Motor20              motor         20              
+// Motor11              motor         11              
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Motor1               motor         1               
+// Motor2               motor         2               
+// Controller1          controller                    
+// Motor3               motor         3               
+// Motor4               motor         4               
+// Motor20              motor         20              
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Motor1               motor         1               
+// Motor2               motor         2               
+// Controller1          controller                    
+// Motor3               motor         3               
+// Motor4               motor         4               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Motor1               motor         1               
+// Motor2               motor         2               
+// Controller1          controller                    
+// Motor3               motor         3               
+// ---- END VEXCODE CONFIGURED DEVICES ----
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
 /*    Module:       main.cpp                                                  */
@@ -73,8 +123,65 @@ void usercontrol(void) {
   while (1) {
     //craig loves the fortnite code
 
-    Motor2.spin(directionType::fwd, Controller1.Axis4.value()/2 + Controller1.Axis3.value()/-2, velocityUnits::pct);
-    Motor1.spin(directionType::fwd, Controller1.Axis4.value()/2 + Controller1.Axis3.value()/-2, velocityUnits::pct);
+    //drive control
+    
+    Motor2.spin(directionType::rev, Controller1.Axis3.value() - Controller1.Axis4.value(), velocityUnits::pct);
+    Motor1.spin(directionType::fwd, Controller1.Axis3.value() + Controller1.Axis4.value(), velocityUnits::pct);
+
+    Motor3.spin(directionType::fwd, Controller1.Axis2.value(), velocityUnits::pct);
+    Motor4.spin(directionType::rev, Controller1.Axis2.value(), velocityUnits::pct);
+
+    //intake control
+
+    if(Controller1.ButtonR1.pressing() || Controller1.ButtonR2.pressing()){
+
+      //if either input is being used, rotate intake accordingly
+
+      if(Controller1.ButtonR1.pressing()){
+        
+        Motor20.spin(directionType::fwd);
+        Motor11.spin(directionType::rev);
+
+      }
+
+      if(Controller1.ButtonR2.pressing()){
+        
+        Motor20.spin(directionType::rev);
+        Motor11.spin(directionType::fwd);
+
+      }
+
+    } else {
+
+      //if not, stop all intakes
+
+      Motor20.stop();
+      Motor11.stop();
+
+    }
+
+
+    //platform control
+
+    if(Controller1.ButtonUp.pressing() or Controller1.ButtonDown.pressing()){
+      
+      if(Controller1.ButtonUp.pressing()){
+        
+        Motor7.spin(directionType::fwd);
+
+      }
+
+      if(Controller1.ButtonDown.pressing()){
+        
+        Motor7.spin(directionType::rev);
+
+      }
+
+    } else {
+
+      Motor7.stop();
+
+    }
 
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
