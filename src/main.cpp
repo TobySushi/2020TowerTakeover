@@ -5,6 +5,44 @@
 // Motor2               motor         2               
 // Controller1          controller                    
 // Motor3               motor         3               
+// Motor5               motor         5               
+// Motor20              motor         20              
+// Motor11              motor         11              
+// Motor7               motor         7               
+// Motor4               motor         4               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Motor1               motor         1               
+// Motor2               motor         2               
+// Controller1          controller                    
+// Motor3               motor         3               
+// Motor5               motor         5               
+// Motor20              motor         20              
+// Motor11              motor         11              
+// Motor7               motor         7               
+// Motor4               motor         4               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Motor1               motor         1               
+// Motor2               motor         2               
+// Controller1          controller                    
+// Motor3               motor         3               
+// Motor5               motor         5               
+// Motor20              motor         20              
+// Motor11              motor         11              
+// Motor7               motor         7               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Motor1               motor         1               
+// Motor2               motor         2               
+// Controller1          controller                    
+// Motor3               motor         3               
 // Motor4               motor         4               
 // Motor20              motor         20              
 // Motor11              motor         11              
@@ -103,9 +141,17 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
-  // ..........................................................................
-  // Insert autonomous user code here.
-  // ..........................................................................
+  Motor1.spin(forward);
+  Motor2.spin(reverse);
+  task::sleep(5000);
+  Motor1.stop(brakeType::brake);
+  Motor2.stop(brakeType::brake);
+  task::sleep(500);  
+  Motor1.spin(reverse);
+  Motor2.spin(forward);
+  task::sleep(5000);
+  Motor1.stop(brakeType::brake);
+  Motor2.stop(brakeType::brake);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -128,38 +174,44 @@ void usercontrol(void) {
     Motor2.spin(directionType::rev, Controller1.Axis3.value() - Controller1.Axis4.value(), velocityUnits::pct);
     Motor1.spin(directionType::fwd, Controller1.Axis3.value() + Controller1.Axis4.value(), velocityUnits::pct);
 
-    Motor3.spin(directionType::fwd, Controller1.Axis2.value(), velocityUnits::pct);
-    Motor4.spin(directionType::rev, Controller1.Axis2.value(), velocityUnits::pct);
 
-    //intake control
+    //arms
+    if(floor(Controller1.Axis2.value()) != 0){
 
-    if(Controller1.ButtonR1.pressing() || Controller1.ButtonR2.pressing()){
-
-      //if either input is being used, rotate intake accordingly
-
-      if(Controller1.ButtonR1.pressing()){
-        
-        Motor20.spin(directionType::fwd);
-        Motor11.spin(directionType::rev);
-
-      }
-
-      if(Controller1.ButtonR2.pressing()){
-        
-        Motor20.spin(directionType::rev);
-        Motor11.spin(directionType::fwd);
-
-      }
+      Motor3.spin(directionType::fwd, Controller1.Axis2.value(), velocityUnits::pct);
+      Motor4.spin(directionType::rev, Controller1.Axis2.value(), velocityUnits::pct);
 
     } else {
 
-      //if not, stop all intakes
-
-      Motor20.stop();
-      Motor11.stop();
+      Motor3.stop();
+      Motor4.stop();
+      Motor3.setStopping(hold);
+      Motor4.setStopping(hold);
 
     }
 
+    Motor3.spin(directionType::fwd, Controller1.Axis2.value(), velocityUnits::pct);
+    Motor4.spin(directionType::rev, Controller1.Axis2.value(), velocityUnits::pct);
+
+    if(Controller1.ButtonR2.pressing()){
+
+      Motor11.spin(directionType::fwd, 100, velocityUnits::pct);
+      Motor20.spin(directionType::rev, 100, velocityUnits::pct);
+
+    } else if (Controller1.ButtonR1.pressing()){
+
+      Motor11.spin(directionType::rev, 100, velocityUnits::pct);
+      Motor20.spin(directionType::fwd, 100, velocityUnits::pct);
+
+    } else {
+
+      Motor11.stop();
+      Motor11.setStopping(brake);
+      Motor20.stop();
+      Motor20.setStopping(brake);
+    }
+
+    //intake control
 
     //platform control
 
